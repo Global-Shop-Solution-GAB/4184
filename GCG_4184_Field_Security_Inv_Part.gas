@@ -1,0 +1,52 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+V.Local.bIsInGroup.Declare(Boolean)
+
+F.Intrinsic.Control.If(V.Caller.Hook, =, 10120)
+	
+	Function.Global.Security.IsInGroup(V.Caller.User, INVFACC, V.Local.bIsInGroup)
+	F.Intrinsic.Control.If(V.Local.bIsInGroup, =, False)
+		F.Intrinsic.UI.ChangeCallerProperty(V.Passed.000024,"LOCK",1)
+		F.Intrinsic.UI.ChangeCallerProperty(V.Passed.000035,"LOCK",1)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.ElseIf(V.Caller.hook, = , 10170)
+	F.Intrinsic.Control.If(V.Passed.000027.trim, = , "")
+		F.Intrinsic.UI.Msgbox("User Defined Field Can't Be Blank")
+		V.Passed.777777.Set(1)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_4184_Field_Security_Inv_Part.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End
+
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.Comments.Start
+${$0$}$GCG_4184_Field_Security_Inv_Par$}$DH1$}$8/16/2016$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$GAB Program will do the following: 1. Restrict access to order quantity and reorder point in inventory master. 2. Will validate that the User Field 1(inventory master) is NOT empty for all parts.
+
+
+Program.Sub.Comments.End
+
